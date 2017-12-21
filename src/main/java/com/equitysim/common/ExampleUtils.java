@@ -124,8 +124,8 @@ public class ExampleUtils {
    * @throws IOException if there is a problem setting up the Pub/Sub topic
    */
   public void setupPubsub() throws IOException {
-    ExamplePubsubTopicAndSubscriptionOptions pubsubOptions =
-        options.as(ExamplePubsubTopicAndSubscriptionOptions.class);
+    PubsubTopicAndSubscriptionOptions pubsubOptions =
+        options.as(PubsubTopicAndSubscriptionOptions.class);
     if (!pubsubOptions.getPubsubTopic().isEmpty()) {
       pendingMessages.add("**********************Set Up Pubsub************************");
       setupPubsubTopic(pubsubOptions.getPubsubTopic());
@@ -151,8 +151,8 @@ public class ExampleUtils {
    * @throws IOException if there is a problem setting up the BigQuery table
    */
   public void setupBigQueryTable() throws IOException {
-    ExampleBigQueryTableOptions bigQueryTableOptions =
-        options.as(ExampleBigQueryTableOptions.class);
+    BigQueryTableOptions bigQueryTableOptions =
+        options.as(BigQueryTableOptions.class);
     if (bigQueryTableOptions.getBigQueryDataset() != null
         && bigQueryTableOptions.getBigQueryTable() != null
         && bigQueryTableOptions.getBigQuerySchema() != null) {
@@ -173,8 +173,8 @@ public class ExampleUtils {
    */
   private void tearDown() {
     pendingMessages.add("*************************Tear Down*************************");
-    ExamplePubsubTopicAndSubscriptionOptions pubsubOptions =
-        options.as(ExamplePubsubTopicAndSubscriptionOptions.class);
+    PubsubTopicAndSubscriptionOptions pubsubOptions =
+        options.as(PubsubTopicAndSubscriptionOptions.class);
     if (!pubsubOptions.getPubsubTopic().isEmpty()) {
       try {
         deletePubsubTopic(pubsubOptions.getPubsubTopic());
@@ -196,8 +196,8 @@ public class ExampleUtils {
       }
     }
 
-    ExampleBigQueryTableOptions bigQueryTableOptions =
-        options.as(ExampleBigQueryTableOptions.class);
+    BigQueryTableOptions bigQueryTableOptions =
+        options.as(BigQueryTableOptions.class);
     if (bigQueryTableOptions.getBigQueryDataset() != null
         && bigQueryTableOptions.getBigQueryTable() != null
         && bigQueryTableOptions.getBigQuerySchema() != null) {

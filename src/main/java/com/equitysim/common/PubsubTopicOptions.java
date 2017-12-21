@@ -24,22 +24,22 @@ import org.apache.beam.sdk.options.Description;
 import org.apache.beam.sdk.options.PipelineOptions;
 
 /**
- * Options that can be used to configure Pub/Sub topic/subscription in Beam examples.
+ * Options that can be used to configure Pub/Sub topic in Beam examples.
  */
-public interface ExamplePubsubTopicAndSubscriptionOptions extends ExamplePubsubTopicOptions {
-  @Description("Pub/Sub subscription")
-  @Default.InstanceFactory(PubsubSubscriptionFactory.class)
-  String getPubsubSubscription();
-  void setPubsubSubscription(String subscription);
+public interface PubsubTopicOptions extends GcpOptions {
+  @Description("Pub/Sub topic")
+  @Default.InstanceFactory(PubsubTopicFactory.class)
+  String getPubsubTopic();
+  void setPubsubTopic(String topic);
 
   /**
-   * Returns a default Pub/Sub subscription based on the project and the job names.
+   * Returns a default Pub/Sub topic based on the project and the job names.
    */
-  class PubsubSubscriptionFactory implements DefaultValueFactory<String> {
+  class PubsubTopicFactory implements DefaultValueFactory<String> {
     @Override
     public String create(PipelineOptions options) {
       return "projects/" + options.as(GcpOptions.class).getProject()
-          + "/subscriptions/" + options.getJobName();
+          + "/topics/" + options.getJobName();
     }
   }
 }

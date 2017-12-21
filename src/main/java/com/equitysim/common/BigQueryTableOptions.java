@@ -17,6 +17,7 @@
  */
 package com.equitysim.common;
 
+import com.google.api.services.bigquery.model.TableSchema;
 import org.apache.beam.sdk.extensions.gcp.options.GcpOptions;
 import org.apache.beam.sdk.options.Default;
 import org.apache.beam.sdk.options.DefaultValueFactory;
@@ -24,22 +25,31 @@ import org.apache.beam.sdk.options.Description;
 import org.apache.beam.sdk.options.PipelineOptions;
 
 /**
- * Options that can be used to configure Pub/Sub topic in Beam examples.
+ * Options that can be used to configure BigQuery tables in Beam examples.
+ * The project defaults to the project being used to run the example.
  */
-public interface ExamplePubsubTopicOptions extends GcpOptions {
-  @Description("Pub/Sub topic")
-  @Default.InstanceFactory(PubsubTopicFactory.class)
-  String getPubsubTopic();
-  void setPubsubTopic(String topic);
+public interface BigQueryTableOptions extends GcpOptions {
+  @Description("BigQuery dataset name")
+  @Default.String("beam_examples")
+  String getBigQueryDataset();
+  void setBigQueryDataset(String dataset);
+
+  @Description("BigQuery table name")
+  @Default.InstanceFactory(BigQueryTableFactory.class)
+  String getBigQueryTable();
+  void setBigQueryTable(String table);
+
+  @Description("BigQuery table schema")
+  TableSchema getBigQuerySchema();
+  void setBigQuerySchema(TableSchema schema);
 
   /**
-   * Returns a default Pub/Sub topic based on the project and the job names.
+   * Returns the job name as the default BigQuery table name.
    */
-  class PubsubTopicFactory implements DefaultValueFactory<String> {
+  class BigQueryTableFactory implements DefaultValueFactory<String> {
     @Override
     public String create(PipelineOptions options) {
-      return "projects/" + options.as(GcpOptions.class).getProject()
-          + "/topics/" + options.getJobName();
+      return options.getJobName().replace('-', '_');
     }
   }
 }

@@ -19,7 +19,7 @@ package com.equitysim;
 
 import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
-import com.equitysim.common.ExampleBigQueryTableOptions;
+import com.equitysim.common.BigQueryTableOptions;
 import com.equitysim.common.ExampleOptions;
 import com.equitysim.common.WriteOneFilePerWindow;
 import org.apache.beam.sdk.Pipeline;
@@ -146,7 +146,7 @@ public class WindowedWordCount {
    * specification of the input and output files.
    */
   public interface Options extends WordCount.WordCountOptions,
-      ExampleOptions, ExampleBigQueryTableOptions {
+      ExampleOptions, BigQueryTableOptions {
     @Description("Fixed window duration, in minutes")
     @Default.Integer(WINDOW_SIZE)
     Integer getWindowSize();
