@@ -16,7 +16,6 @@ com/equitysim/MinimalWordCount$1.class
 com/equitysim/common/PubsubTopicOptions.class
 com/equitysim/common/BigQueryTableOptions$BigQueryTableFactory.class
 com/equitysim/common/WriteToBigQuery$FieldInfo.class
-com/equitysim/TwitterFlowPipeline$ChangeEventToStringFn.class
 com/equitysim/common/WriteWindowedToBigQuery$BuildRowFn.class
 com/equitysim/TwitterFlowPipeline.class
 com/equitysim/MinimalWordCount.class

@@ -49,21 +49,28 @@ import java.util.*;
 public class TwitterFlowPipeline {
 
     private static final Logger LOG = LoggerFactory.getLogger(TwitterFlowPipeline.class);
-    static final int WINDOW_SIZE = 1;  // Default window duration in minutes
-    private static final String TIMESTAMP_ATTRIBUTE = "created_at";
 
     private static DateTimeFormatter fmt =
             DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS")
                     .withZone(DateTimeZone.forTimeZone(TimeZone.getTimeZone("PST")));
 
     /**
-     * Options supported by {@link WindowedWordCount}.
-     *
      * <p>Inherits standard example configuration options, which allow specification of the BigQuery
-     * table and the PubSub topic, as well as the {@link WordCount.WordCountOptions} support for
-     * specification of the input file.
+     * table and the PubSub topic
      */
     public static interface Options extends PubsubTopicOptions, BigQueryTableOptions {
+
+        /**
+         * Set this required option to specify where to write the output.
+         */
+        @Description("Path of the file to write to")
+        @Validation.Required
+        String getOutput();
+        void setOutput(String value);
+
+        @Description("Whether to run the pipeline with unbounded input")
+        boolean isUnbounded();
+        void setUnbounded(boolean value);
 
         /**
          * By default, this example reads from a public dataset containing the text of
@@ -74,163 +81,20 @@ public class TwitterFlowPipeline {
         String getInputFile();
         void setInputFile(String value);
 
-        /**
-         * Set this required option to specify where to write the output.
-         */
-        @Description("Path of the file to write to")
-        @Validation.Required
-        String getOutput();
-        void setOutput(String value);
-
-        @Description("Fixed window duration, in minutes")
-        @Default.Integer(WINDOW_SIZE)
-        Integer getWindowSize();
-        void setWindowSize(Integer value);
-
-        @Description("Whether to run the pipeline with unbounded input")
-        boolean isUnbounded();
-        void setUnbounded(boolean value);
-
         @Description("BigQuery Dataset to write tables to. Must already exist.")
         @Default.String("tweetify")
         String getDataset();
         void setDataset(String value);
 
         @Description("Prefix used for the BigQuery table names")
-        @Default.String("hourly_question_totals")
-        String getQuestionTotalsTableName();
-        void setQuestionTotalsTableName(String value);
+        @Default.String("general_fintech_tweets")
+        String getGeneralTweetsTableName();
+        void setGeneralTweetsTableName(String value);
 
         @Description("Prefix used for the BigQuery table names")
-        @Default.String("fintech_tweets")
-        String getTweetsTableName();
-        void setTweetsTableName(String value);
-    }
-
-
-    /**
-     * Create a map of information that describes how to write pipeline output to BigQuery. This map
-     * is used to write team score sums and includes event timing information.
-     */
-    protected static Map<String, WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>>
-    configureFeedbackWindowedTableWrite() {
-
-        Map<String, WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>> tableConfigure =
-                new HashMap<String, WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>>();
-        tableConfigure.put(
-                "widget_id",
-                new WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>(
-                        "STRING", (c, w) -> c.element().getKey()));
-        tableConfigure.put(
-                "helpful_true",
-                new WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>(
-                        "INTEGER", (c, w) -> c.element().getValue()));
-        tableConfigure.put(
-                "window_start",
-                new WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>(
-                        "TIMESTAMP",
-                        (c, w) -> {
-                            IntervalWindow window = (IntervalWindow) w;
-                            return ISODateTimeFormat.dateTime().print(window.start().toDateTime());
-                        }));
-        tableConfigure.put(
-                "window_end",
-                new WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>(
-                        "TIMESTAMP",
-                        (c, w) -> {
-                            IntervalWindow window = (IntervalWindow) w;
-                            return ISODateTimeFormat.dateTime().print(window.end().toDateTime());
-                        }));
-        tableConfigure.put(
-                "processing_time",
-                new WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>(
-                        "STRING", (c, w) -> fmt.print(Instant.now())));
-        tableConfigure.put(
-                "timing",
-                new WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>(
-                        "STRING", (c, w) -> c.pane().getTiming().toString()));
-        return tableConfigure;
-    }
-
-    /**
-     * Create a map of information that describes how to write pipeline output to BigQuery. This map
-     * is used to write team score sums and includes event timing information.
-     */
-    protected static Map<String, WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>>
-    configureQuestionsWindowedTableWrite() {
-
-        Map<String, WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>> tableConfigure =
-                new HashMap<String, WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>>();
-        tableConfigure.put(
-                "widget_id",
-                new WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>(
-                        "STRING", (c, w) -> c.element().getKey()));
-        tableConfigure.put(
-                "num_questions",
-                new WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>(
-                        "INTEGER", (c, w) -> c.element().getValue()));
-        tableConfigure.put(
-                "window_start",
-                new WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>(
-                        "TIMESTAMP",
-                        (c, w) -> {
-                            IntervalWindow window = (IntervalWindow) w;
-                            return ISODateTimeFormat.dateTime().print(window.start().toDateTime());
-                        }));
-        tableConfigure.put(
-                "window_end",
-                new WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>(
-                        "TIMESTAMP",
-                        (c, w) -> {
-                            IntervalWindow window = (IntervalWindow) w;
-                            return ISODateTimeFormat.dateTime().print(window.end().toDateTime());
-                        }));
-        tableConfigure.put(
-                "processing_time",
-                new WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>(
-                        "STRING", (c, w) -> fmt.print(Instant.now())));
-        tableConfigure.put(
-                "timing",
-                new WriteWindowedToBigQuery.FieldInfo<KV<String, Integer>>(
-                        "STRING", (c, w) -> c.pane().getTiming().toString()));
-        return tableConfigure;
-    }
-
-    /**
-     * Create a map of information that describes how to write pipeline output to BigQuery. This map
-     * is used to write team score sums and includes event timing information.
-     */
-
-    protected static Map<String, WriteWindowedToBigQuery.FieldInfo<KV<String, Iterable<String>>>>
-    configureQuidJsonWindowedTableWrite() {
-
-        Map<String, WriteWindowedToBigQuery.FieldInfo<KV<String, Iterable<String>>>> tableConfigure =
-                new HashMap<String, WriteWindowedToBigQuery.FieldInfo<KV<String, Iterable<String>>>>();
-        tableConfigure.put(
-                "quid",
-                new WriteWindowedToBigQuery.FieldInfo<KV<String, Iterable<String>>>(
-                        "STRING", (c, w) -> c.element().getKey()));
-        tableConfigure.put(
-                "event_obj_array",
-                new WriteWindowedToBigQuery.FieldInfo<KV<String, Iterable<String>>>(
-                        "STRING", (c, w) -> String.join("++",  c.element().toString() )));
-        tableConfigure.put(
-                "window_start",
-                new WriteWindowedToBigQuery.FieldInfo<KV<String, Iterable<String>>>(
-                        "TIMESTAMP",
-                        (c, w) -> {
-                            IntervalWindow window = (IntervalWindow) w;
-                            return ISODateTimeFormat.dateTime().print(window.start().toDateTime());
-                        }));
-        tableConfigure.put(
-                "window_end",
-                new WriteWindowedToBigQuery.FieldInfo<KV<String, Iterable<String>>>(
-                        "TIMESTAMP",
-                        (c, w) -> {
-                            IntervalWindow window = (IntervalWindow) w;
-                            return ISODateTimeFormat.dateTime().print(window.end().toDateTime());
-                        }));
-        return tableConfigure;
+        @Default.String("classified_fintech_tweets")
+        String getClassifiedTweetsTableName();
+        void setClassifiedTweetsTableName(String value);
     }
 
     /**
@@ -291,7 +155,7 @@ public class TwitterFlowPipeline {
     }
 
     /**
-     * Creates a pcollection of widget_feedback_info objects from pubsub msgs
+     * Creates a pcollection of tweet objects from pubsub msgs
      */
     static class ProcessEachElement extends DoFn<String, TweetObj> {
         private static final Logger LOG = LoggerFactory.getLogger(ProcessEachElement.class);
@@ -325,16 +189,6 @@ public class TwitterFlowPipeline {
             }
         }
     }
-
-    public static class ChangeEventToStringFn extends DoFn<TweetObj, String> {
-
-        @ProcessElement
-        public void processElement(ProcessContext c) {
-            TweetObj i = c.element();
-            c.output( i.toString());
-        }
-    }
-
 
     static class TweetObjToTweetTableRowFn extends DoFn<TweetObj, TableRow> {
         @ProcessElement
@@ -384,6 +238,13 @@ public class TwitterFlowPipeline {
                                 .discardingFiredPanes()
                 );
 
+        PCollection<TweetObj> classified_tweets_collection = pubSub_input.apply("FilterClassifiedSubstring", Filter.by(
+                (TweetObj tweet_obj)
+                        -> tweet_obj.getTweet_txt().contains("looking for a job in investment banking")));
+
+        PCollection<TweetObj> general_tweets_collection = pubSub_input.apply("FilterGeneralSubstring", Filter.by(
+                (TweetObj tweet_obj)
+                        -> tweet_obj.getTweet_txt().contains("looking for a job in investment banking") == false));
 
         // Build the table schema for the output table.
         List<TableFieldSchema> fields = new ArrayList<>();
@@ -393,65 +254,26 @@ public class TwitterFlowPipeline {
         fields.add(new TableFieldSchema().setName("user_id").setType("STRING"));
         fields.add(new TableFieldSchema().setName("screen_name").setType("STRING"));
 
-
         TableSchema schema = new TableSchema().setFields(fields);
 
-        pubSub_input.apply("CreateTableRow",new CreateTweetTableRow())
-        .apply("WriteToBigQuery",BigQueryIO.writeTableRows()
+        // Write to big query
+        general_tweets_collection.apply("CreateTweetTableRow",new CreateTweetTableRow())
+        .apply("WriteGeneralTweet",BigQueryIO.writeTableRows()
                 .to(WriteToBigQuery.getTable( options.as(GcpOptions.class).getProject(),
                         options.getDataset(),
-                        options.getTweetsTableName()))
+                        options.getGeneralTweetsTableName()))
                 .withSchema(schema)
                 .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
                 .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND));
 
-//        // Take AidaEventObject pcollection and filter out non feedback events
-//        PCollection<TweetObj> aida_feedback_events = pubSub_input.apply("FilterNonFeedback", Filter.by(
-//                (TweetObj eObj)
-//                        -> eObj.getEventSubType().equals("Feedback")  )
-//        );
-
-
-//        // Take feedback filtered aida events and create hourly windows
-//        PCollection<TweetObj> windowed_aida_feedback_objects = aida_feedback_events
-//                .apply("AddEventTimestamps", WithTimestamps.of((TweetObj i) -> new Instant(i.getTimestamp()))
-//                        .withAllowedTimestampSkew(new Duration(Long.MAX_VALUE))
-//                ).apply("FixedHourlyWindows",
-//                        Window.<TweetObj>into(FixedWindows.of(Duration.standardHours(1)))
-//                                .triggering(AfterWatermark.pastEndOfWindow()
-//                                        .withEarlyFirings(AfterProcessingTime.pastFirstElementInPane()
-//                                                .plusDelayOf(Duration.standardMinutes(5)))
-//                                        .withLateFirings(AfterProcessingTime.pastFirstElementInPane()
-//                                                .plusDelayOf(Duration.standardMinutes(10))))
-//                                .withAllowedLateness(Duration.standardDays(300))
-//                                .discardingFiredPanes()
-//                );
-//
-//
-//        // Sum feedback true windowed totals
-//        PCollection<KV<String,Integer>> kv_aida_feedback_true = windowed_aida_feedback_objects
-//                .apply("GetTotalWindowedNumTrueFeedbacks", new ExtractAndSumFeedbackTrueTotals());
-//
-//        kv_aida_feedback_true.apply(
-//                "WriteHourlyFeedbackTrueSum",
-//                new WriteToBigQuery<KV<String, Integer>>(
-//                        options.as(GcpOptions.class).getProject(),
-//                        options.getDataset(),
-//                        options.getFeedbackTotalsTableName(),
-//                        configureFeedbackWindowedTableWrite()));
-//
-//
-//        // Sum feedback windowed totals
-//        PCollection<KV<String,Integer>> kv_aida_feedback = windowed_aida_feedback_objects
-//                .apply("GetTotalWindowedNumFeedbacks", new ExtractAndSumFeedbackTotals());
-//
-//        kv_aida_feedback.apply(
-//                "WriteHourlyFeedbackSum",
-//                new WriteToBigQuery<KV<String, Integer>>(
-//                        options.as(GcpOptions.class).getProject(),
-//                        options.getDataset(),
-//                        options.getQuestionTotalsTableName(),
-//                        configureQuestionsWindowedTableWrite()));
+        classified_tweets_collection.apply("CreateTweetTableRow",new CreateTweetTableRow())
+                .apply("WriteClassifiedTweet",BigQueryIO.writeTableRows()
+                        .to(WriteToBigQuery.getTable( options.as(GcpOptions.class).getProject(),
+                                options.getDataset(),
+                                options.getClassifiedTweetsTableName()))
+                        .withSchema(schema)
+                        .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
+                        .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND));
 
 
         PipelineResult result = pipeline.run();
