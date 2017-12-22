@@ -114,7 +114,7 @@ public class WriteToBigQuery<InputT>
     }
 
     /** Utility to construct an output table reference. */
-    static TableReference getTable(String projectId, String datasetId, String tableName) {
+    public static TableReference getTable(String projectId, String datasetId, String tableName) {
         TableReference table = new TableReference();
         table.setDatasetId(datasetId);
         table.setProjectId(projectId);

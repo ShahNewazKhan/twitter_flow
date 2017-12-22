@@ -1,6 +1,9 @@
 package com.equitysim;
 
 import com.equitysim.common.*;
+import com.google.api.services.bigquery.model.TableFieldSchema;
+import com.google.api.services.bigquery.model.TableRow;
+import com.google.api.services.bigquery.model.TableSchema;
 import org.apache.avro.reflect.Nullable;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.PipelineResult;
@@ -9,6 +12,7 @@ import org.apache.beam.sdk.coders.CoderException;
 import org.apache.beam.sdk.extensions.gcp.options.GcpOptions;
 
 import org.apache.beam.sdk.io.TextIO;
+import org.apache.beam.sdk.io.gcp.bigquery.BigQueryIO;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubIO;
 import org.apache.beam.sdk.options.Default;
 import org.apache.beam.sdk.options.Description;
@@ -88,7 +92,7 @@ public class TwitterFlowPipeline {
         void setUnbounded(boolean value);
 
         @Description("BigQuery Dataset to write tables to. Must already exist.")
-        @Default.String("test1")
+        @Default.String("tweetify")
         String getDataset();
         void setDataset(String value);
 
@@ -98,8 +102,8 @@ public class TwitterFlowPipeline {
         void setQuestionTotalsTableName(String value);
 
         @Description("Prefix used for the BigQuery table names")
-        @Default.String("hourly_feedback_totals")
-        String getFeedbackTotalsTableName();
+        @Default.String("fintech_tweets")
+        String getTweetsTableName();
         void setFeedbackTotalsTableName(String value);
     }
 
@@ -236,63 +240,59 @@ public class TwitterFlowPipeline {
     public static class TweetObj {
         @Nullable String tweet_id;
         @Nullable Long timestamp;
-        @Nullable JSONObject aidaEventObjJson;
-        @Nullable String quid;
+        @Nullable JSONObject tweet_obj_json;
+        @Nullable String tweet_txt;
+        @Nullable String user_id;
+        @Nullable String screen_name;
+        @Nullable String location;
 
         public TweetObj() {}
 
-        public TweetObj(String widget_id, JSONObject aidaEventObjJson, Long timestamp, String quid) {
-            this.tweet_id = widget_id;
+        public TweetObj(
+                String tweet_id,
+                JSONObject tweet_json,
+                Long timestamp,
+                String tweet_txt,
+                String user_id,
+                String screen_name,
+                String location) {
+
+            this.tweet_id = tweet_id;
             this.timestamp = timestamp;
-            this.aidaEventObjJson = aidaEventObjJson;
-            this.quid = quid;
+            this.tweet_obj_json = tweet_json;
+            this.tweet_txt = tweet_txt;
+            this.user_id = user_id;
+            this.screen_name = screen_name;
+            this.location = location;
         }
 
-        public String widget_id() {
-            return this.tweet_id;
+        public String getTweet_txt() {
+            return this.tweet_txt;
         }
 
-        public JSONObject getAidaEventObjJson() { return aidaEventObjJson; }
+        public JSONObject getTweetObjJson() { return tweet_obj_json; }
 
         public Long getTimestamp() {
             return this.timestamp;
         }
 
-        public String getWidget_id(){
+        public String getTweet_id(){
             return this.tweet_id;
         }
 
-        public String toString(){
-
-            return aidaEventObjJson.toString(4);
+        public String getUser_id(){
+            return this.user_id;
         }
 
-
-        public String getEventSubType(){
-
-            String sub_type = aidaEventObjJson.getString("subType");
-            return sub_type;
+        public String getScreen_name(){
+            return this.screen_name;
         }
 
-        public int getFeedback(){
-
-            String sub_type = aidaEventObjJson.getString("subType");
-
-            if(sub_type.equals("Feedback"))
-                return 1; else return 0;
+        public String getLocation(){
+            return this.location;
         }
 
-        public int getHelpfulFeedback(){
-            Boolean helpful = aidaEventObjJson.getBoolean("helpful");
-
-            if(helpful) return 1;else return 0;
-        }
-
-        public String getQuid(){
-            String current_quid = aidaEventObjJson.getString("quid");
-
-            return current_quid;
-        }
+        public String toString(){ return tweet_obj_json.toString(4); }
 
     }
 
@@ -313,8 +313,19 @@ public class TwitterFlowPipeline {
                 String tweet_id = tweet_json.getString("id_str");
                 Long event_timestamp = c.timestamp().getMillis();
                 String tweet_txt = tweet_json.getString("text");
+                JSONObject user = tweet_json.getJSONObject("user");
+                String user_id = user.getString("id_str");
+                String screen_name = user.getString("screen_name");
+                String location = user.getString("location");
 
-                TweetObj current_info_object = new TweetObj(tweet_id, tweet_json, event_timestamp, tweet_txt);
+                TweetObj current_info_object = new TweetObj(
+                        tweet_id,
+                        tweet_json,
+                        event_timestamp,
+                        tweet_txt,
+                        user_id,
+                        screen_name,
+                        location);
                 LOG.debug("PROCESSING " + current_info_object.toString());
                 c.output(current_info_object);
             }catch (Exception e){
@@ -333,68 +344,31 @@ public class TwitterFlowPipeline {
     }
 
 
-    public static class ConvertSessionedQuidToKV extends PTransform<PCollection<TweetObj>,PCollection<KV<String,Iterable<String>>>> {
+    static class TweetObjToTweetTableRowFn extends DoFn<TweetObj, TableRow> {
+        @ProcessElement
+        public void processElement(ProcessContext c) {
 
-        ConvertSessionedQuidToKV() { }
+            TweetObj tweetObj = c.element();
 
-        @Override
-        public PCollection<KV<String, Iterable<String>>> expand(
-                PCollection<TweetObj> aidaEventObj) {
-
-            return aidaEventObj
-                    .apply(MapElements
-                            .into(TypeDescriptors.kvs(TypeDescriptors.strings(), TypeDescriptors.strings()))
-                            .via((TweetObj aida_feedback_event) -> KV.of(aida_feedback_event.getQuid(),
-                                    aida_feedback_event.toString() )  ) )
-                    .apply(GroupByKey.<String, String>create());
+            TableRow row = new TableRow()
+                    .set("tweet_id", tweetObj.getTweet_id())
+                    .set("tweet_txt", tweetObj.getTweet_txt())
+                    .set("timestamp", tweetObj.getTimestamp())
+                    .set("user_id", tweetObj.getUser_id())
+                    .set("screen_name", c.timestamp().toDateTime())
+                    .set("location", tweetObj.getLocation());
+            c.output(row);
         }
     }
 
-    public static class ExtractAndSumFeedbackTrueTotals extends PTransform<PCollection<TweetObj>,PCollection<KV<String,Integer>>> {
-
-        ExtractAndSumFeedbackTrueTotals() { }
-
+    static class CreateTweetTableRow extends PTransform<PCollection<TweetObj>, PCollection<TableRow>> {
         @Override
-        public PCollection<KV<String, Integer>> expand(
-                PCollection<TweetObj> aidaEventObj) {
+        public PCollection<TableRow> expand(PCollection<TweetObj> tweets) {
 
-            return aidaEventObj
-                    .apply(MapElements
-                            .into(TypeDescriptors.kvs(TypeDescriptors.strings(), TypeDescriptors.integers()))
-                            .via((TweetObj aida_feedback_event) -> KV.of(aida_feedback_event.getWidget_id(), aida_feedback_event.getHelpfulFeedback())))
-                    .apply(Sum.integersPerKey());
-        }
-    }
+            PCollection<TableRow> results = tweets.apply(
+                    ParDo.of(new TweetObjToTweetTableRowFn()));
 
-    public static class ExtractAndSumFeedbackTotals extends PTransform<PCollection<TweetObj>,PCollection<KV<String,Integer>>> {
-
-        ExtractAndSumFeedbackTotals() { }
-
-        @Override
-        public PCollection<KV<String, Integer>> expand(
-                PCollection<TweetObj> aidaEventObj) {
-
-            return aidaEventObj
-                    .apply(MapElements
-                            .into(TypeDescriptors.kvs(TypeDescriptors.strings(), TypeDescriptors.integers()))
-                            .via((TweetObj aida_feedback_event) -> KV.of(aida_feedback_event.getWidget_id(), aida_feedback_event.getFeedback())))
-                    .apply(Sum.integersPerKey());
-        }
-    }
-
-    public static class ExtractAndSumQuestionTotals extends PTransform<PCollection<TweetObj>,PCollection<KV<String,Integer>>> {
-
-        ExtractAndSumQuestionTotals() { }
-
-        @Override
-        public PCollection<KV<String, Integer>> expand(
-                PCollection<TweetObj> aidaEventObj) {
-
-            return aidaEventObj
-                    .apply(MapElements
-                            .into(TypeDescriptors.kvs(TypeDescriptors.strings(), TypeDescriptors.integers()))
-                            .via((TweetObj aida_question_event) -> KV.of(aida_question_event.tweet_id, 1)))
-                    .apply(Sum.integersPerKey());
+            return results;
         }
     }
 
@@ -403,8 +377,8 @@ public class TwitterFlowPipeline {
         Options options = PipelineOptionsFactory.fromArgs(args).withValidation().as(Options.class);
         Pipeline pipeline = Pipeline.create(options);
 
-        // Take input from pubsub and make pcollections of AidaEventObjects
-        PCollection<String> pubSub_input = pipeline.apply(PubsubIO.readStrings().fromTopic(options.getPubsubTopic()))
+        // Take input from pubsub and make pcollections of TweetObjects
+        PCollection<TweetObj> pubSub_input = pipeline.apply(PubsubIO.readStrings().fromTopic(options.getPubsubTopic()))
                 .apply("ParseTweetFromPubSub", ParDo.of(new ProcessEachElement()))
                 .apply("AddEventTimestamps", WithTimestamps.of((TweetObj i) -> new Instant(i.getTimestamp()))
                         .withAllowedTimestampSkew(new Duration(Long.MAX_VALUE))
@@ -417,10 +391,29 @@ public class TwitterFlowPipeline {
                                                 .plusDelayOf(Duration.standardSeconds(2))))
                                 .withAllowedLateness(Duration.millis(500))
                                 .discardingFiredPanes()
-                )
-                .apply("ExtractTweetTxt",ParDo.of(new ChangeEventToStringFn()));
+                );
 
-        pubSub_input.apply(new WriteOneFilePerWindow(options.getOutput(), 2));
+
+        // Build the table schema for the output table.
+        List<TableFieldSchema> fields = new ArrayList<>();
+        fields.add(new TableFieldSchema().setName("tweet_id").setType("STRING"));
+        fields.add(new TableFieldSchema().setName("tweet_txt").setType("STRING"));
+        fields.add(new TableFieldSchema().setName("timestamp").setType("TIMESTAMP"));
+        fields.add(new TableFieldSchema().setName("user_id").setType("STRING"));
+        fields.add(new TableFieldSchema().setName("screen_name").setType("STRING"));
+        fields.add(new TableFieldSchema().setName("location").setType("STRING"));
+
+
+        TableSchema schema = new TableSchema().setFields(fields);
+
+        pubSub_input.apply("CreateTableRow",new CreateTweetTableRow())
+        .apply("WriteToBigQuery",BigQueryIO.writeTableRows()
+                .to(WriteToBigQuery.getTable( options.as(GcpOptions.class).getProject(),
+                        options.getDataset(),
+                        options.getTweetsTableName()))
+                .withSchema(schema)
+                .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
+                .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND));
 
 //        // Take AidaEventObject pcollection and filter out non feedback events
 //        PCollection<TweetObj> aida_feedback_events = pubSub_input.apply("FilterNonFeedback", Filter.by(

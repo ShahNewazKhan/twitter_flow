@@ -1,4 +1,4 @@
-# EQUITYSIM-TWITER-FLOW
+# TWITER-FLOW
 
 This repo houses the Equity Sim Twitter analytics Java pipeline for GCP Dataflow
 
