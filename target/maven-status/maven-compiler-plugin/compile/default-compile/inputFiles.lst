@@ -1,0 +1,13 @@
+/Users/shah/projects/equity_sim/tweetify/twitter_flow/src/main/java/com/equitysim/TwitterFlowPipeline.java
+/Users/shah/projects/equity_sim/tweetify/twitter_flow/src/main/java/com/equitysim/common/PubsubTopicOptions.java
+/Users/shah/projects/equity_sim/tweetify/twitter_flow/src/main/java/com/equitysim/common/BigQueryTableOptions.java
+/Users/shah/projects/equity_sim/tweetify/twitter_flow/src/main/java/com/equitysim/common/ExampleOptions.java
+/Users/shah/projects/equity_sim/tweetify/twitter_flow/src/main/java/com/equitysim/MinimalWordCount.java
+/Users/shah/projects/equity_sim/tweetify/twitter_flow/src/main/java/com/equitysim/WindowedWordCount.java
+/Users/shah/projects/equity_sim/tweetify/twitter_flow/src/main/java/com/equitysim/DebuggingWordCount.java
+/Users/shah/projects/equity_sim/tweetify/twitter_flow/src/main/java/com/equitysim/common/PubsubTopicAndSubscriptionOptions.java
+/Users/shah/projects/equity_sim/tweetify/twitter_flow/src/main/java/com/equitysim/common/WriteWindowedToBigQuery.java
+/Users/shah/projects/equity_sim/tweetify/twitter_flow/src/main/java/com/equitysim/common/WriteOneFilePerWindow.java
+/Users/shah/projects/equity_sim/tweetify/twitter_flow/src/main/java/com/equitysim/common/ExampleUtils.java
+/Users/shah/projects/equity_sim/tweetify/twitter_flow/src/main/java/com/equitysim/common/WriteToBigQuery.java
+/Users/shah/projects/equity_sim/tweetify/twitter_flow/src/main/java/com/equitysim/WordCount.java

@@ -41,7 +41,7 @@ mvn compile exec:java \
 Build and run twitter_flow pipeline on GCP Dataflow using script
 
 ```sh
-./pipeline.sh chc-admin twitter-flow fintech-tweet run
+./pipeline.sh chc-admin twitter-flow fintech-tweets run
 
 gcloud beta dataflow jobs list --status=(active|terminated|all)
 ```

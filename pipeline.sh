@@ -34,7 +34,7 @@ case "$COMMAND" in
         --pubsubTopic=projects/${PROJECT_ID}/topics/${TOPIC_ID} \
         --tempLocation=gs://${BUCKET_NAME}/temp \
         --inputFile=\"\"" \
-        -Pdataflow-runner        
+        -Pdataflow-runner
         ;;
     direct-run )
         mvn compile exec:java \

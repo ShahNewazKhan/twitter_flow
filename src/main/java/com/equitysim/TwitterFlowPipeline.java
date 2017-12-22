@@ -8,6 +8,7 @@ import org.apache.beam.sdk.coders.Coder;
 import org.apache.beam.sdk.coders.CoderException;
 import org.apache.beam.sdk.extensions.gcp.options.GcpOptions;
 
+import org.apache.beam.sdk.io.TextIO;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubIO;
 import org.apache.beam.sdk.options.Default;
 import org.apache.beam.sdk.options.Description;
@@ -229,26 +230,26 @@ public class TwitterFlowPipeline {
     }
 
     /**
-     * Class to hold info about Widget feedbacks
+     * Class to hold info about tweet objects
      */
     @DefaultCoder(AvroCoder.class)
-    public static class AidaEventObj {
-        @Nullable String widget_id;
+    public static class TweetObj {
+        @Nullable String tweet_id;
         @Nullable Long timestamp;
         @Nullable JSONObject aidaEventObjJson;
         @Nullable String quid;
 
-        public AidaEventObj() {}
+        public TweetObj() {}
 
-        public AidaEventObj(String widget_id, JSONObject aidaEventObjJson, Long timestamp, String quid) {
-            this.widget_id = widget_id;
+        public TweetObj(String widget_id, JSONObject aidaEventObjJson, Long timestamp, String quid) {
+            this.tweet_id = widget_id;
             this.timestamp = timestamp;
             this.aidaEventObjJson = aidaEventObjJson;
             this.quid = quid;
         }
 
         public String widget_id() {
-            return this.widget_id;
+            return this.tweet_id;
         }
 
         public JSONObject getAidaEventObjJson() { return aidaEventObjJson; }
@@ -258,7 +259,7 @@ public class TwitterFlowPipeline {
         }
 
         public String getWidget_id(){
-            return this.widget_id;
+            return this.tweet_id;
         }
 
         public String toString(){
@@ -298,20 +299,22 @@ public class TwitterFlowPipeline {
     /**
      * Creates a pcollection of widget_feedback_info objects from pubsub msgs
      */
-    static class ProcessEachElement extends DoFn<String, AidaEventObj> {
+    static class ProcessEachElement extends DoFn<String, TweetObj> {
         private static final Logger LOG = LoggerFactory.getLogger(ProcessEachElement.class);
 
         @ProcessElement
         public void processElement(ProcessContext c) {
 
             String msg = c.element();
-            JSONObject aida_event_json = new JSONObject(msg);
-            try {
-                String widget_id = aida_event_json.getString("widgetId");
-                Long event_timestamp = aida_event_json.getLong("created_at");
-                String quid = aida_event_json.getString("quid");
 
-                AidaEventObj current_info_object = new AidaEventObj(widget_id, aida_event_json, event_timestamp, quid);
+
+            JSONObject tweet_json = new JSONObject(msg);
+            try {
+                String tweet_id = tweet_json.getString("id_str");
+                Long event_timestamp = c.timestamp().getMillis();
+                String tweet_txt = tweet_json.getString("text");
+
+                TweetObj current_info_object = new TweetObj(tweet_id, tweet_json, event_timestamp, tweet_txt);
                 LOG.debug("PROCESSING " + current_info_object.toString());
                 c.output(current_info_object);
             }catch (Exception e){
@@ -320,77 +323,77 @@ public class TwitterFlowPipeline {
         }
     }
 
-    static class ChangeEventToStringFn extends DoFn<AidaEventObj, String> {
+    public static class ChangeEventToStringFn extends DoFn<TweetObj, String> {
 
         @ProcessElement
         public void processElement(ProcessContext c) {
-            AidaEventObj i = c.element();
+            TweetObj i = c.element();
             c.output( i.toString());
         }
     }
 
 
-    public static class ConvertSessionedQuidToKV extends PTransform<PCollection<AidaEventObj>,PCollection<KV<String,Iterable<String>>>> {
+    public static class ConvertSessionedQuidToKV extends PTransform<PCollection<TweetObj>,PCollection<KV<String,Iterable<String>>>> {
 
         ConvertSessionedQuidToKV() { }
 
         @Override
         public PCollection<KV<String, Iterable<String>>> expand(
-                PCollection<AidaEventObj> aidaEventObj) {
+                PCollection<TweetObj> aidaEventObj) {
 
             return aidaEventObj
                     .apply(MapElements
                             .into(TypeDescriptors.kvs(TypeDescriptors.strings(), TypeDescriptors.strings()))
-                            .via((AidaEventObj aida_feedback_event) -> KV.of(aida_feedback_event.getQuid(),
+                            .via((TweetObj aida_feedback_event) -> KV.of(aida_feedback_event.getQuid(),
                                     aida_feedback_event.toString() )  ) )
                     .apply(GroupByKey.<String, String>create());
         }
     }
 
-    public static class ExtractAndSumFeedbackTrueTotals extends PTransform<PCollection<AidaEventObj>,PCollection<KV<String,Integer>>> {
+    public static class ExtractAndSumFeedbackTrueTotals extends PTransform<PCollection<TweetObj>,PCollection<KV<String,Integer>>> {
 
         ExtractAndSumFeedbackTrueTotals() { }
 
         @Override
         public PCollection<KV<String, Integer>> expand(
-                PCollection<AidaEventObj> aidaEventObj) {
+                PCollection<TweetObj> aidaEventObj) {
 
             return aidaEventObj
                     .apply(MapElements
                             .into(TypeDescriptors.kvs(TypeDescriptors.strings(), TypeDescriptors.integers()))
-                            .via((AidaEventObj aida_feedback_event) -> KV.of(aida_feedback_event.getWidget_id(), aida_feedback_event.getHelpfulFeedback())))
+                            .via((TweetObj aida_feedback_event) -> KV.of(aida_feedback_event.getWidget_id(), aida_feedback_event.getHelpfulFeedback())))
                     .apply(Sum.integersPerKey());
         }
     }
 
-    public static class ExtractAndSumFeedbackTotals extends PTransform<PCollection<AidaEventObj>,PCollection<KV<String,Integer>>> {
+    public static class ExtractAndSumFeedbackTotals extends PTransform<PCollection<TweetObj>,PCollection<KV<String,Integer>>> {
 
         ExtractAndSumFeedbackTotals() { }
 
         @Override
         public PCollection<KV<String, Integer>> expand(
-                PCollection<AidaEventObj> aidaEventObj) {
+                PCollection<TweetObj> aidaEventObj) {
 
             return aidaEventObj
                     .apply(MapElements
                             .into(TypeDescriptors.kvs(TypeDescriptors.strings(), TypeDescriptors.integers()))
-                            .via((AidaEventObj aida_feedback_event) -> KV.of(aida_feedback_event.getWidget_id(), aida_feedback_event.getFeedback())))
+                            .via((TweetObj aida_feedback_event) -> KV.of(aida_feedback_event.getWidget_id(), aida_feedback_event.getFeedback())))
                     .apply(Sum.integersPerKey());
         }
     }
 
-    public static class ExtractAndSumQuestionTotals extends PTransform<PCollection<AidaEventObj>,PCollection<KV<String,Integer>>> {
+    public static class ExtractAndSumQuestionTotals extends PTransform<PCollection<TweetObj>,PCollection<KV<String,Integer>>> {
 
         ExtractAndSumQuestionTotals() { }
 
         @Override
         public PCollection<KV<String, Integer>> expand(
-                PCollection<AidaEventObj> aidaEventObj) {
+                PCollection<TweetObj> aidaEventObj) {
 
             return aidaEventObj
                     .apply(MapElements
                             .into(TypeDescriptors.kvs(TypeDescriptors.strings(), TypeDescriptors.integers()))
-                            .via((AidaEventObj aida_question_event) -> KV.of(aida_question_event.widget_id, 1)))
+                            .via((TweetObj aida_question_event) -> KV.of(aida_question_event.tweet_id, 1)))
                     .apply(Sum.integersPerKey());
         }
     }
@@ -401,56 +404,71 @@ public class TwitterFlowPipeline {
         Pipeline pipeline = Pipeline.create(options);
 
         // Take input from pubsub and make pcollections of AidaEventObjects
-        PCollection<AidaEventObj> pubSub_input = pipeline.apply(PubsubIO.readStrings().fromTopic(options.getPubsubTopic()))
-                .apply("ParseAidaEvent", ParDo.of(new ProcessEachElement()));
-
-        // Take AidaEventObject pcollection and filter out non feedback events
-        PCollection<AidaEventObj> aida_feedback_events = pubSub_input.apply("FilterNonFeedback", Filter.by(
-                (AidaEventObj eObj)
-                        -> eObj.getEventSubType().equals("Feedback")  )
-        );
-
-
-        // Take feedback filtered aida events and create hourly windows
-        PCollection<AidaEventObj> windowed_aida_feedback_objects = aida_feedback_events
-                .apply("AddEventTimestamps", WithTimestamps.of((AidaEventObj i) -> new Instant(i.getTimestamp()))
+        PCollection<String> pubSub_input = pipeline.apply(PubsubIO.readStrings().fromTopic(options.getPubsubTopic()))
+                .apply("ParseTweetFromPubSub", ParDo.of(new ProcessEachElement()))
+                .apply("AddEventTimestamps", WithTimestamps.of((TweetObj i) -> new Instant(i.getTimestamp()))
                         .withAllowedTimestampSkew(new Duration(Long.MAX_VALUE))
-                ).apply("FixedHourlyWindows",
-                        Window.<AidaEventObj>into(FixedWindows.of(Duration.standardHours(1)))
+                ).apply("WindowTweetIntoSeconds",
+                        Window.<TweetObj>into(FixedWindows.of(Duration.standardSeconds(2)))
                                 .triggering(AfterWatermark.pastEndOfWindow()
                                         .withEarlyFirings(AfterProcessingTime.pastFirstElementInPane()
-                                                .plusDelayOf(Duration.standardMinutes(5)))
+                                                .plusDelayOf(Duration.standardSeconds(1)))
                                         .withLateFirings(AfterProcessingTime.pastFirstElementInPane()
-                                                .plusDelayOf(Duration.standardMinutes(10))))
-                                .withAllowedLateness(Duration.standardDays(300))
+                                                .plusDelayOf(Duration.standardSeconds(2))))
+                                .withAllowedLateness(Duration.millis(500))
                                 .discardingFiredPanes()
-                );
+                )
+                .apply("ExtractTweetTxt",ParDo.of(new ChangeEventToStringFn()));
+
+        pubSub_input.apply(new WriteOneFilePerWindow(options.getOutput(), 2));
+
+//        // Take AidaEventObject pcollection and filter out non feedback events
+//        PCollection<TweetObj> aida_feedback_events = pubSub_input.apply("FilterNonFeedback", Filter.by(
+//                (TweetObj eObj)
+//                        -> eObj.getEventSubType().equals("Feedback")  )
+//        );
 
 
-        // Sum feedback true windowed totals
-        PCollection<KV<String,Integer>> kv_aida_feedback_true = windowed_aida_feedback_objects
-                .apply("GetTotalWindowedNumTrueFeedbacks", new ExtractAndSumFeedbackTrueTotals());
-
-        kv_aida_feedback_true.apply(
-                "WriteHourlyFeedbackTrueSum",
-                new WriteToBigQuery<KV<String, Integer>>(
-                        options.as(GcpOptions.class).getProject(),
-                        options.getDataset(),
-                        options.getFeedbackTotalsTableName(),
-                        configureFeedbackWindowedTableWrite()));
-
-
-        // Sum feedback windowed totals
-        PCollection<KV<String,Integer>> kv_aida_feedback = windowed_aida_feedback_objects
-                .apply("GetTotalWindowedNumFeedbacks", new ExtractAndSumFeedbackTotals());
-
-        kv_aida_feedback.apply(
-                "WriteHourlyFeedbackSum",
-                new WriteToBigQuery<KV<String, Integer>>(
-                        options.as(GcpOptions.class).getProject(),
-                        options.getDataset(),
-                        options.getQuestionTotalsTableName(),
-                        configureQuestionsWindowedTableWrite()));
+//        // Take feedback filtered aida events and create hourly windows
+//        PCollection<TweetObj> windowed_aida_feedback_objects = aida_feedback_events
+//                .apply("AddEventTimestamps", WithTimestamps.of((TweetObj i) -> new Instant(i.getTimestamp()))
+//                        .withAllowedTimestampSkew(new Duration(Long.MAX_VALUE))
+//                ).apply("FixedHourlyWindows",
+//                        Window.<TweetObj>into(FixedWindows.of(Duration.standardHours(1)))
+//                                .triggering(AfterWatermark.pastEndOfWindow()
+//                                        .withEarlyFirings(AfterProcessingTime.pastFirstElementInPane()
+//                                                .plusDelayOf(Duration.standardMinutes(5)))
+//                                        .withLateFirings(AfterProcessingTime.pastFirstElementInPane()
+//                                                .plusDelayOf(Duration.standardMinutes(10))))
+//                                .withAllowedLateness(Duration.standardDays(300))
+//                                .discardingFiredPanes()
+//                );
+//
+//
+//        // Sum feedback true windowed totals
+//        PCollection<KV<String,Integer>> kv_aida_feedback_true = windowed_aida_feedback_objects
+//                .apply("GetTotalWindowedNumTrueFeedbacks", new ExtractAndSumFeedbackTrueTotals());
+//
+//        kv_aida_feedback_true.apply(
+//                "WriteHourlyFeedbackTrueSum",
+//                new WriteToBigQuery<KV<String, Integer>>(
+//                        options.as(GcpOptions.class).getProject(),
+//                        options.getDataset(),
+//                        options.getFeedbackTotalsTableName(),
+//                        configureFeedbackWindowedTableWrite()));
+//
+//
+//        // Sum feedback windowed totals
+//        PCollection<KV<String,Integer>> kv_aida_feedback = windowed_aida_feedback_objects
+//                .apply("GetTotalWindowedNumFeedbacks", new ExtractAndSumFeedbackTotals());
+//
+//        kv_aida_feedback.apply(
+//                "WriteHourlyFeedbackSum",
+//                new WriteToBigQuery<KV<String, Integer>>(
+//                        options.as(GcpOptions.class).getProject(),
+//                        options.getDataset(),
+//                        options.getQuestionTotalsTableName(),
+//                        configureQuestionsWindowedTableWrite()));
 
 
         PipelineResult result = pipeline.run();
