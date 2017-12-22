@@ -2,9 +2,62 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5e10078e-5412-44b1-b201-2e7adec291c3" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/DebuggingWordCount$FilterTextFn.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/DebuggingWordCount$WordCountOptions.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/DebuggingWordCount.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/MinimalWordCount$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/MinimalWordCount$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/MinimalWordCount.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/TwitterFlowPipeline$ChangeEventToStringFn.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/TwitterFlowPipeline$ConvertSessionedQuidToKV.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/TwitterFlowPipeline$ExtractAndSumFeedbackTotals.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/TwitterFlowPipeline$ExtractAndSumFeedbackTrueTotals.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/TwitterFlowPipeline$ExtractAndSumQuestionTotals.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/TwitterFlowPipeline$Options.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/TwitterFlowPipeline$ProcessEachElement.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/TwitterFlowPipeline$TweetObj.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/TwitterFlowPipeline.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/WindowedWordCount$AddTimestampFn.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/WindowedWordCount$DefaultToCurrentSystemTime.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/WindowedWordCount$DefaultToMinTimestampPlusOneHour.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/WindowedWordCount$Options.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/WindowedWordCount.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/WordCount$CountWords.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/WordCount$ExtractWordsFn.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/WordCount$FormatAsTextFn.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/WordCount$WordCountOptions.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/WordCount.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/BigQueryTableOptions$BigQueryTableFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/BigQueryTableOptions.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/ExampleBigQueryTableOptions$BigQueryTableFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/ExampleBigQueryTableOptions.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/ExampleOptions.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/ExamplePubsubTopicAndSubscriptionOptions$PubsubSubscriptionFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/ExamplePubsubTopicAndSubscriptionOptions.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/ExamplePubsubTopicOptions$PubsubTopicFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/ExamplePubsubTopicOptions.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/ExampleUtils$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/ExampleUtils.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/PubsubTopicAndSubscriptionOptions$PubsubSubscriptionFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/PubsubTopicAndSubscriptionOptions.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/PubsubTopicOptions$PubsubTopicFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/PubsubTopicOptions.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/WriteOneFilePerWindow$PerWindowFiles.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/WriteOneFilePerWindow.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/WriteToBigQuery$BuildRowFn.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/WriteToBigQuery$FieldFn.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/WriteToBigQuery$FieldInfo.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/WriteToBigQuery.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/WriteWindowedToBigQuery$BuildRowFn.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/equitysim/common/WriteWindowedToBigQuery.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/test-classes/com/equitysim/DebuggingWordCountTest.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/test-classes/com/equitysim/WordCountTest.class" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/equitysim/TwitterFlowPipeline.java" afterPath="$PROJECT_DIR$/src/main/java/com/equitysim/TwitterFlowPipeline.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteToBigQuery.java" afterPath="$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteToBigQuery.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/equitysim/WindowedWordCount.java" afterPath="$PROJECT_DIR$/src/main/java/com/equitysim/WindowedWordCount.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteOneFilePerWindow.java" afterPath="$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteOneFilePerWindow.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,8 +73,8 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="0">
-                <caret line="0" column="2" lean-forward="true" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
+              <first_editor relative-caret-position="501">
+                <caret line="43" column="7" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -29,23 +82,54 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TwitterFlowPipeline.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="TwitterFlowPipeline.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/TwitterFlowPipeline.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="262">
-              <caret line="412" column="36" lean-forward="false" selection-start-line="412" selection-start-column="36" selection-end-line="412" selection-end-column="36" />
+            <state relative-caret-position="212">
+              <caret line="408" column="15" lean-forward="true" selection-start-line="408" selection-start-column="15" selection-end-line="408" selection-end-column="15" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#15549#15559#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="WriteToBigQuery.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="WriteOneFilePerWindow.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteOneFilePerWindow.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="304">
+              <caret line="94" column="7" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="114" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WindowedWordCount.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/WindowedWordCount.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="117">
+              <caret line="171" column="47" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="223" selection-end-column="0" />
+              <folding>
+                <marker date="1513966001000" expanded="false" signature="8620:8628" ph="&lt;~&gt;" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="493">
+              <caret line="29" column="21" lean-forward="false" selection-start-line="29" selection-start-column="21" selection-end-line="29" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WriteToBigQuery.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteToBigQuery.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="383">
+            <state relative-caret-position="1632">
               <caret line="116" column="11" lean-forward="false" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -57,7 +141,7 @@
       <file leaf-file-name="pipeline.sh" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pipeline.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="314">
+            <state relative-caret-position="629">
               <caret line="37" column="0" lean-forward="false" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
               <folding />
             </state>
@@ -76,6 +160,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>getTable</find>
+      <find>org.apache.beam</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -90,11 +175,13 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteWindowedToBigQuery.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/pipeline.sh" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/src/main/java/com/equitysim/TwitterFlowPipeline.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteToBigQuery.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/equitysim/TwitterFlowPipeline.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteOneFilePerWindow.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/equitysim/WindowedWordCount.java" />
       </list>
     </option>
   </component>
@@ -124,6 +211,7 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -171,7 +259,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -290,17 +377,17 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33776867" sideWeight="0.49755502" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.108" sideWeight="0.502445" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38485157" sideWeight="0.33924204" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3294621" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297414" sideWeight="0.49755502" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.285" sideWeight="0.49755502" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.5752303" sideWeight="0.66075796" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2422619" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24877751" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -329,6 +416,136 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteWindowedToBigQuery.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="24" column="5" lean-forward="false" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="731">
+            <caret line="43" column="7" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/TwitterFlowPipeline.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6137">
+          <caret line="414" column="73" lean-forward="true" selection-start-line="414" selection-start-column="73" selection-end-line="414" selection-end-column="73" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="29" column="21" lean-forward="false" selection-start-line="29" selection-start-column="21" selection-end-line="29" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteToBigQuery.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1632">
+          <caret line="116" column="11" lean-forward="false" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pipeline.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="629">
+          <caret line="37" column="0" lean-forward="false" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteOneFilePerWindow.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1122">
+          <caret line="98" column="55" lean-forward="true" selection-start-line="98" selection-start-column="55" selection-end-line="98" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteWindowedToBigQuery.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="5" lean-forward="true" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="2" lean-forward="false" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteOneFilePerWindow.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1479">
+          <caret line="105" column="5" lean-forward="true" selection-start-line="105" selection-start-column="5" selection-end-line="105" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="29" column="21" lean-forward="false" selection-start-line="29" selection-start-column="21" selection-end-line="29" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteToBigQuery.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1904">
+          <caret line="116" column="11" lean-forward="false" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pipeline.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="629">
+          <caret line="37" column="0" lean-forward="false" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/TwitterFlowPipeline.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6732">
+          <caret line="406" column="0" lean-forward="true" selection-start-line="406" selection-start-column="0" selection-end-line="453" selection-end-column="67" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteWindowedToBigQuery.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
@@ -397,7 +614,6 @@
           <caret line="109" column="56" lean-forward="false" selection-start-line="109" selection-start-column="33" selection-end-line="109" selection-end-column="56" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#15549#15559#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -439,17 +655,6 @@
           <caret line="109" column="56" lean-forward="false" selection-start-line="109" selection-start-column="33" selection-end-line="109" selection-end-column="56" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#15549#15559#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteWindowedToBigQuery.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
-          <caret line="24" column="5" lean-forward="true" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -462,10 +667,63 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/pipeline.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="629">
+          <caret line="37" column="0" lean-forward="false" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteToBigQuery.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1632">
+          <caret line="116" column="11" lean-forward="false" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="104">
-          <caret line="70" column="21" lean-forward="false" selection-start-line="70" selection-start-column="21" selection-end-line="70" selection-end-column="21" />
+        <state relative-caret-position="493">
+          <caret line="29" column="21" lean-forward="false" selection-start-line="29" selection-start-column="21" selection-end-line="29" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteWindowedToBigQuery.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="575">
+          <caret line="40" column="0" lean-forward="true" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="501">
+            <caret line="43" column="7" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteOneFilePerWindow.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="94" column="7" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="114" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -473,51 +731,17 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/WindowedWordCount.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="117">
-          <caret line="171" column="45" lean-forward="false" selection-start-line="171" selection-start-column="26" selection-end-line="171" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pipeline.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="37" column="0" lean-forward="false" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="0">
-            <caret line="0" column="2" lean-forward="true" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
-            <folding />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <caret line="171" column="47" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="223" selection-end-column="0" />
+          <folding>
+            <marker date="1513966001000" expanded="false" signature="8620:8628" ph="&lt;~&gt;" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/TwitterFlowPipeline.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="412" column="36" lean-forward="false" selection-start-line="412" selection-start-column="36" selection-end-line="412" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#15549#15559#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/equitysim/common/WriteToBigQuery.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="383">
-          <caret line="116" column="11" lean-forward="false" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
+        <state relative-caret-position="212">
+          <caret line="408" column="15" lean-forward="true" selection-start-line="408" selection-start-column="15" selection-end-line="408" selection-end-column="15" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

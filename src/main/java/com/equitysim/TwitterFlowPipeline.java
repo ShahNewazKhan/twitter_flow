@@ -104,7 +104,7 @@ public class TwitterFlowPipeline {
         @Description("Prefix used for the BigQuery table names")
         @Default.String("fintech_tweets")
         String getTweetsTableName();
-        void setFeedbackTotalsTableName(String value);
+        void setTweetsTableName(String value);
     }
 
 
@@ -244,7 +244,6 @@ public class TwitterFlowPipeline {
         @Nullable String tweet_txt;
         @Nullable String user_id;
         @Nullable String screen_name;
-        @Nullable String location;
 
         public TweetObj() {}
 
@@ -254,8 +253,8 @@ public class TwitterFlowPipeline {
                 Long timestamp,
                 String tweet_txt,
                 String user_id,
-                String screen_name,
-                String location) {
+                String screen_name
+        ) {
 
             this.tweet_id = tweet_id;
             this.timestamp = timestamp;
@@ -263,7 +262,6 @@ public class TwitterFlowPipeline {
             this.tweet_txt = tweet_txt;
             this.user_id = user_id;
             this.screen_name = screen_name;
-            this.location = location;
         }
 
         public String getTweet_txt() {
@@ -286,10 +284,6 @@ public class TwitterFlowPipeline {
 
         public String getScreen_name(){
             return this.screen_name;
-        }
-
-        public String getLocation(){
-            return this.location;
         }
 
         public String toString(){ return tweet_obj_json.toString(4); }
@@ -316,7 +310,6 @@ public class TwitterFlowPipeline {
                 JSONObject user = tweet_json.getJSONObject("user");
                 String user_id = user.getString("id_str");
                 String screen_name = user.getString("screen_name");
-                String location = user.getString("location");
 
                 TweetObj current_info_object = new TweetObj(
                         tweet_id,
@@ -324,8 +317,7 @@ public class TwitterFlowPipeline {
                         event_timestamp,
                         tweet_txt,
                         user_id,
-                        screen_name,
-                        location);
+                        screen_name);
                 LOG.debug("PROCESSING " + current_info_object.toString());
                 c.output(current_info_object);
             }catch (Exception e){
@@ -353,10 +345,9 @@ public class TwitterFlowPipeline {
             TableRow row = new TableRow()
                     .set("tweet_id", tweetObj.getTweet_id())
                     .set("tweet_txt", tweetObj.getTweet_txt())
-                    .set("timestamp", tweetObj.getTimestamp())
+                    .set("timestamp", ISODateTimeFormat.dateTime().print(c.timestamp().toDateTime()))
                     .set("user_id", tweetObj.getUser_id())
-                    .set("screen_name", c.timestamp().toDateTime())
-                    .set("location", tweetObj.getLocation());
+                    .set("screen_name", tweetObj.getScreen_name());
             c.output(row);
         }
     }
@@ -383,12 +374,12 @@ public class TwitterFlowPipeline {
                 .apply("AddEventTimestamps", WithTimestamps.of((TweetObj i) -> new Instant(i.getTimestamp()))
                         .withAllowedTimestampSkew(new Duration(Long.MAX_VALUE))
                 ).apply("WindowTweetIntoSeconds",
-                        Window.<TweetObj>into(FixedWindows.of(Duration.standardSeconds(2)))
+                        Window.<TweetObj>into(FixedWindows.of(Duration.standardSeconds(20)))
                                 .triggering(AfterWatermark.pastEndOfWindow()
                                         .withEarlyFirings(AfterProcessingTime.pastFirstElementInPane()
-                                                .plusDelayOf(Duration.standardSeconds(1)))
+                                                .plusDelayOf(Duration.standardSeconds(5)))
                                         .withLateFirings(AfterProcessingTime.pastFirstElementInPane()
-                                                .plusDelayOf(Duration.standardSeconds(2))))
+                                                .plusDelayOf(Duration.standardSeconds(5))))
                                 .withAllowedLateness(Duration.millis(500))
                                 .discardingFiredPanes()
                 );
@@ -401,7 +392,6 @@ public class TwitterFlowPipeline {
         fields.add(new TableFieldSchema().setName("timestamp").setType("TIMESTAMP"));
         fields.add(new TableFieldSchema().setName("user_id").setType("STRING"));
         fields.add(new TableFieldSchema().setName("screen_name").setType("STRING"));
-        fields.add(new TableFieldSchema().setName("location").setType("STRING"));
 
 
         TableSchema schema = new TableSchema().setFields(fields);
